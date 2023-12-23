@@ -1,4 +1,4 @@
-package com.roshanadke.weekwatch.ui.theme
+package com.roshanadke.weekwatch.presentation.ui.theme
 
 import android.app.Activity
 import android.os.Build

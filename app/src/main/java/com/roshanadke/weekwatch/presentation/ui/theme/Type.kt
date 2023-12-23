@@ -1,4 +1,4 @@
-package com.roshanadke.weekwatch.ui.theme
+package com.roshanadke.weekwatch.presentation.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

@@ -1,4 +1,4 @@
-package com.roshanadke.weekwatch
+package com.roshanadke.weekwatch.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -6,11 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.roshanadke.weekwatch.ui.theme.WeekWatchTheme
+import com.roshanadke.weekwatch.presentation.ui.theme.WeekWatchTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

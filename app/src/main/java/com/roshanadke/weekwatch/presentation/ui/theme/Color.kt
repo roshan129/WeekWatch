@@ -1,4 +1,4 @@
-package com.roshanadke.weekwatch.ui.theme
+package com.roshanadke.weekwatch.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
