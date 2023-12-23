@@ -1,3 +1,6 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -21,6 +24,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val key = gradleLocalProperties(rootDir).getProperty("TMDB_API_KEY")
+        buildConfigField("String", "API_KEY", key)
     }
 
     buildTypes {
@@ -41,6 +47,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -76,8 +83,8 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.48.1")
     kapt("com.google.dagger:hilt-android-compiler:2.48.1")
 
-    //hilt viewmodel
-    implementation("androidx.lifecycle:lifecycle-view-model-compose:2.6.1")
+    //hilt navigation compose
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0-alpha01")
 
     //room db
     implementation("androidx.room:room-runtime:2.6.1")

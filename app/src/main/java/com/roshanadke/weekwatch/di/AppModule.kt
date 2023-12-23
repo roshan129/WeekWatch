@@ -2,6 +2,8 @@ package com.roshanadke.weekwatch.di
 
 import android.util.Log
 import com.roshanadke.weekwatch.data.network.TrendingShowApiService
+import com.roshanadke.weekwatch.data.repository.TrendingShowRepositoryImpl
+import com.roshanadke.weekwatch.domain.repository.TrendingShowRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,17 +24,24 @@ object AppModule {
         return Retrofit.Builder()
             .baseUrl(TrendingShowApiService.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
-            .client(httpClient)
+            //.client(httpClient)
             .build()
             .create(TrendingShowApiService::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+    fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideTrendingRepository(
+        apiService: TrendingShowApiService
+    ): TrendingShowRepository {
+        return TrendingShowRepositoryImpl(apiService)
     }
 
 }

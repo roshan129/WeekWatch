@@ -1,5 +1,6 @@
 package com.roshanadke.weekwatch.data.network
 
+import com.roshanadke.weekwatch.data.network.dto.TrendingResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -10,6 +11,8 @@ interface TrendingShowApiService {
     }
 
     @GET("3/trending/all/day")
-    fun getAllTrending()
+    suspend fun getAllTrending(
+        @Query("api_key") apiKey: String
+    ): TrendingResponseDto
 
 }
