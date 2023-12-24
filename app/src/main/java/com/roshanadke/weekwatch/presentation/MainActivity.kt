@@ -12,6 +12,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import com.roshanadke.weekwatch.BuildConfig
+import com.roshanadke.weekwatch.presentation.screens.TrendingShowScreen
 import com.roshanadke.weekwatch.presentation.ui.theme.WeekWatchTheme
 import com.roshanadke.weekwatch.presentation.viewmodels.TrendingShowViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,7 +28,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-
+                    TrendingShowScreen()
                 }
             }
         }
