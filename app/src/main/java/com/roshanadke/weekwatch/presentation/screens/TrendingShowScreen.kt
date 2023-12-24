@@ -19,13 +19,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.roshanadke.weekwatch.common.Screen
 import com.roshanadke.weekwatch.presentation.components.TrendingItemCard
 import com.roshanadke.weekwatch.presentation.viewmodels.TrendingShowViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TrendingShowScreen(
-    viewModel: TrendingShowViewModel = hiltViewModel()
+    navController: NavController,
+    viewModel: TrendingShowViewModel = hiltViewModel(),
 ) {
 
     val trendingListState = viewModel.trendingItemListState.value
@@ -53,13 +56,16 @@ fun TrendingShowScreen(
                 items(trendingListState.list) { item ->
                     TrendingItemCard(
                         imageEndpoint = item.poster_path,
-                        showName = item.title ?: item.name
+                        showName = item.title ?: item.name,
+                        onCardClicked = {
+                            navController.navigate(Screen.DetailsScreen.route)
+                        }
                     )
                 }
             }
         }
 
-        if(trendingListState.isLoading) {
+        if (trendingListState.isLoading) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
@@ -68,7 +74,6 @@ fun TrendingShowScreen(
                 CircularProgressIndicator(color = Color.Yellow)
             }
         }
-
 
 
     }

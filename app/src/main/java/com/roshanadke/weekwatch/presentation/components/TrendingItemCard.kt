@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,17 +19,20 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.roshanadke.weekwatch.data.network.TrendingShowApiService
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TrendingItemCard(
     imageEndpoint: String?,
-    showName: String?
+    showName: String?,
+    onCardClicked: () -> Unit
 ) {
 
-    val url = TrendingShowApiService.IMAGE_BASE_URL + imageEndpoint
+    val imageUrl = TrendingShowApiService.IMAGE_BASE_URL + imageEndpoint
 
     Card(
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        onClick = onCardClicked
     ) {
         Column(
             modifier = Modifier
@@ -37,7 +41,7 @@ fun TrendingItemCard(
         ) {
 
             AsyncImage(
-                model = url,
+                model = imageUrl,
                 contentScale = ContentScale.Crop,
                 contentDescription = null,
                 modifier = Modifier
