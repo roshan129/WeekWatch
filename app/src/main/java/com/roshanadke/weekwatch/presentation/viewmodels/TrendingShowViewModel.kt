@@ -34,7 +34,7 @@ class TrendingShowViewModel @Inject constructor(
     }
 
     private fun getAllTrendingShows() {
-        repository.getAllTrendingShows(BuildConfig.API_KEY).onEach {
+        repository.getAllTrendingShows().onEach {
             when (it) {
                 is UiState.Error -> {
                     _trendingItemListState.value = _trendingItemListState.value.copy(

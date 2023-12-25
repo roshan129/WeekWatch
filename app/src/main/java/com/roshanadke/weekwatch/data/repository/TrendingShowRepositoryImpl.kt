@@ -13,10 +13,10 @@ class TrendingShowRepositoryImpl(
     private val apiService: TrendingShowApiService
 ) : TrendingShowRepository {
 
-    override fun getAllTrendingShows(key: String): Flow<UiState<TrendingResponseDto>> = flow {
+    override fun getAllTrendingShows(): Flow<UiState<TrendingResponseDto>> = flow {
         try {
             emit(UiState.Loading())
-            val result = apiService.getAllTrending(key)
+            val result = apiService.getAllTrending()
             emit(UiState.Success(data = result))
         } catch (e: Exception) {
             e.printStackTrace()

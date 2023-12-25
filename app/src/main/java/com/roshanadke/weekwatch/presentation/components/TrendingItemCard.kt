@@ -22,6 +22,7 @@ import com.roshanadke.weekwatch.data.network.TrendingShowApiService
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TrendingItemCard(
+    modifier: Modifier,
     imageEndpoint: String?,
     showName: String?,
     onCardClicked: () -> Unit
@@ -30,7 +31,7 @@ fun TrendingItemCard(
     val imageUrl = TrendingShowApiService.IMAGE_BASE_URL + imageEndpoint
 
     Card(
-        modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
+        modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         onClick = onCardClicked
     ) {

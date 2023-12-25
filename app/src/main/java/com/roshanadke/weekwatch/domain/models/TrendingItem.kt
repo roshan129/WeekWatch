@@ -1,5 +1,11 @@
 package com.roshanadke.weekwatch.domain.models
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import java.io.Serializable
+
+
+@Parcelize
 data class TrendingItem(
     val adult: Boolean?,
     val backdrop_path: String?,
@@ -20,4 +26,4 @@ data class TrendingItem(
     val video: Boolean?,
     val vote_average: Double?,
     val vote_count: Int?
-)
+): Parcelable

@@ -7,6 +7,7 @@ plugins {
     id("kotlin-android")
     id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -26,7 +27,9 @@ android {
         }
 
         val key = gradleLocalProperties(rootDir).getProperty("TMDB_API_KEY")
+        val token = gradleLocalProperties(rootDir).getProperty("AUTH_TOKEN")
         buildConfigField("String", "API_KEY", key)
+        buildConfigField("String", "AUTH_TOKEN", token)
     }
 
     buildTypes {
@@ -103,4 +106,8 @@ dependencies {
 
     //icons
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
+
+    //logging
+    implementation("com.jakewharton.timber:timber:5.0.1")
+
 }

@@ -18,8 +18,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.gson.GsonBuilder
+import com.roshanadke.weekwatch.common.Constants
 import com.roshanadke.weekwatch.common.Screen
 import com.roshanadke.weekwatch.presentation.components.TrendingItemCard
 import com.roshanadke.weekwatch.presentation.viewmodels.TrendingShowViewModel
@@ -55,9 +58,14 @@ fun TrendingShowScreen(
                 ) {
                 items(trendingListState.list) { item ->
                     TrendingItemCard(
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
                         imageEndpoint = item.poster_path,
                         showName = item.title ?: item.name,
                         onCardClicked = {
+                            navController.currentBackStackEntry?.savedStateHandle?.set(
+                                key = Constants.TRENDING_ITEM,
+                                value = item
+                            )
                             navController.navigate(Screen.DetailsScreen.route)
                         }
                     )

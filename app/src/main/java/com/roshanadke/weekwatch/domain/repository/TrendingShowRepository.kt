@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface TrendingShowRepository {
 
-    fun getAllTrendingShows(key: String): Flow<UiState<TrendingResponseDto>>
+    fun getAllTrendingShows(): Flow<UiState<TrendingResponseDto>>
 
 }
