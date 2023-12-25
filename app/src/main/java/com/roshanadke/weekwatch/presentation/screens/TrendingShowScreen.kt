@@ -18,13 +18,17 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -41,8 +45,10 @@ import androidx.navigation.NavController
 import com.roshanadke.weekwatch.R
 import com.roshanadke.weekwatch.common.Constants
 import com.roshanadke.weekwatch.common.Screen
+import com.roshanadke.weekwatch.common.UiEvent
 import com.roshanadke.weekwatch.presentation.components.TrendingItemCard
 import com.roshanadke.weekwatch.presentation.viewmodels.TrendingShowViewModel
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -60,7 +66,23 @@ fun TrendingShowScreen(
         mutableStateOf(false)
     }
 
+    val snackBarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        viewModel.eventFlow.collectLatest {event ->
+            when (event) {
+                is UiEvent.ShowSnackbar -> {
+                    snackBarHostState.showSnackbar(event.message.asString(context))
+                }
+            }
+        }
+    }
+
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(snackBarHostState)
+        },
         topBar = {
             TopAppBar(
                 title = {
@@ -69,7 +91,9 @@ fun TrendingShowScreen(
                             value = searchQuery.value, onValueChange = {
                                 viewModel.setSearchQuery(it)
                             },
-                            modifier = Modifier.padding(start = 12.dp).fillMaxWidth()
+                            modifier = Modifier
+                                .padding(start = 12.dp)
+                                .fillMaxWidth()
                                 .drawBehind {
                                     drawLine(
                                         color = Color.LightGray,

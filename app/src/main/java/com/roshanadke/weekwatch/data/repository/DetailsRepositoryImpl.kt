@@ -7,6 +7,7 @@ import com.roshanadke.weekwatch.domain.models.TvShowDetails
 import com.roshanadke.weekwatch.domain.repository.DetailsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.io.IOException
 
 class DetailsRepositoryImpl(
     private val apiService: TrendingShowApiService
@@ -16,6 +17,8 @@ class DetailsRepositoryImpl(
             emit(UiState.Loading())
             val result = apiService.getTvShowDetails(id).toTvShowDetails()
             emit(UiState.Success(result))
+        } catch (e: IOException) {
+            emit(UiState.Error(message = "Please check your internet connection"))
         } catch (e: Exception) {
             e.printStackTrace()
             emit(UiState.Error(message = e.localizedMessage))
@@ -27,6 +30,8 @@ class DetailsRepositoryImpl(
             emit(UiState.Loading())
             val result = apiService.getSimilarShows(id)
             emit(UiState.Success(result))
+        } catch (e: IOException) {
+            emit(UiState.Error(message = "Please check your internet connection"))
         } catch (e: Exception) {
             e.printStackTrace()
             emit(UiState.Error(message = e.localizedMessage))

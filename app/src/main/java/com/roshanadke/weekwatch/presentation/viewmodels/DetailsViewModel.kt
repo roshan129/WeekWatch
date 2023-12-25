@@ -5,7 +5,10 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.roshanadke.weekwatch.R
+import com.roshanadke.weekwatch.common.UiEvent
 import com.roshanadke.weekwatch.common.UiState
+import com.roshanadke.weekwatch.common.UiText
 import com.roshanadke.weekwatch.data.local.TrendingDataEntity
 import com.roshanadke.weekwatch.data.local.TvShowDao
 import com.roshanadke.weekwatch.domain.models.TrendingItem
@@ -14,6 +17,8 @@ import com.roshanadke.weekwatch.domain.repository.DetailsRepository
 import com.roshanadke.weekwatch.presentation.screens.TrendingItemListState
 import com.roshanadke.weekwatch.presentation.screens.TvShowDetailsState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -33,14 +38,23 @@ class DetailsViewModel @Inject constructor(
         mutableStateOf(TrendingItemListState())
     var similarItemListState: State<TrendingItemListState> = _similarItemListState
 
+    private val _eventFlow = MutableSharedFlow<UiEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
+
     fun getTvShowDetails(id: String) {
         repository.getTvShowDetails(id).onEach {
-            Timber.d("getTvShowDetails: number_of_seasons:  ${it.data?.number_of_seasons} ")
-
             when (it) {
                 is UiState.Error -> {
                     _tvShowDetailsState.value = _tvShowDetailsState.value.copy(
                         isLoading = false
+                    )
+                    _eventFlow.emit(
+                        UiEvent.ShowSnackbar(
+                            when (val message = it.message) {
+                                null -> UiText.StringResource(R.string.something_went_wrong)
+                                else -> UiText.DynamicString(message)
+                            }
+                        )
                     )
                 }
 
@@ -68,6 +82,14 @@ class DetailsViewModel @Inject constructor(
                 is UiState.Error -> {
                     _similarItemListState.value = _similarItemListState.value.copy(
                         isLoading = false
+                    )
+                    _eventFlow.emit(
+                        UiEvent.ShowSnackbar(
+                            when (val message = it.message) {
+                                null -> UiText.StringResource(R.string.something_went_wrong)
+                                else -> UiText.DynamicString(message)
+                            }
+                        )
                     )
                 }
 

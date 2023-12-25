@@ -35,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -45,11 +46,13 @@ import coil.compose.AsyncImage
 import com.roshanadke.weekwatch.R
 import com.roshanadke.weekwatch.common.Constants
 import com.roshanadke.weekwatch.common.Screen
+import com.roshanadke.weekwatch.common.UiEvent
 import com.roshanadke.weekwatch.data.network.TrendingShowApiService
 import com.roshanadke.weekwatch.domain.models.TrendingItem
 import com.roshanadke.weekwatch.presentation.components.SeasonCard
 import com.roshanadke.weekwatch.presentation.components.TrendingItemCard
 import com.roshanadke.weekwatch.presentation.viewmodels.DetailsViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,6 +63,7 @@ fun DetailsScreen(
     viewModel: DetailsViewModel = hiltViewModel()
 ) {
 
+    val context = LocalContext.current
     val backdropImage = TrendingShowApiService.BACKDROP_IMAGE_BASE_URL + trendingItem?.backdrop_path
     val halfScreenWidth = LocalConfiguration.current.screenWidthDp / 2
     var isBookmarked by rememberSaveable {
@@ -77,6 +81,14 @@ fun DetailsScreen(
         trendingItem?.id?.let {
             viewModel.getSimilarShows(it.toString())
             viewModel.getTvShowDetails(it.toString())
+        }
+
+        viewModel.eventFlow.collectLatest {event ->
+            when (event) {
+                is UiEvent.ShowSnackbar -> {
+                    snackBarHostState.showSnackbar(event.message.asString(context))
+                }
+            }
         }
     }
 
@@ -130,7 +142,9 @@ fun DetailsScreen(
                     model = backdropImage,
                     contentScale = ContentScale.Crop,
                     contentDescription = trendingItem?.name,
-                    modifier = Modifier.padding(horizontal = 8.dp)
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp)
+                        .fillMaxWidth()
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
