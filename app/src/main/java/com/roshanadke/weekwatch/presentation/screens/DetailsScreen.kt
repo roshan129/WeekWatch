@@ -60,7 +60,7 @@ fun DetailsScreen(
     viewModel: DetailsViewModel = hiltViewModel()
 ) {
 
-    val backdropImage = TrendingShowApiService.IMAGE_BASE_URL + trendingItem?.backdrop_path
+    val backdropImage = TrendingShowApiService.BACKDROP_IMAGE_BASE_URL + trendingItem?.backdrop_path
     val halfScreenWidth = LocalConfiguration.current.screenWidthDp / 2
     var isBookmarked by rememberSaveable {
         mutableStateOf(false)
@@ -71,8 +71,8 @@ fun DetailsScreen(
 
     LaunchedEffect(Unit) {
         trendingItem?.id?.let {
-            viewModel.getTvShowDetails(it.toString())
             viewModel.getSimilarShows(it.toString())
+            viewModel.getTvShowDetails(it.toString())
         }
     }
 
@@ -137,25 +137,22 @@ fun DetailsScreen(
 
                 Spacer(modifier = Modifier.height(18.dp))
 
-                if (trendingItem?.media_type?.equals(Constants.TV) == true) {
-                    Text(
-                        text = "Seasons",
-                        fontSize = 18.sp,
-                        modifier = Modifier.padding(horizontal = 12.dp)
+                Text(
+                    text = "Seasons",
+                    fontSize = 18.sp,
+                    modifier = Modifier.padding(horizontal = 12.dp)
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+
+                tvShowDetailsState.showDetails.seasons.forEach { season ->
+                    SeasonCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp),
+                        seasonNo = season.season_number,
+                        episodes = season.episode_count
                     )
                     Spacer(modifier = Modifier.height(12.dp))
-
-                    tvShowDetailsState.showDetails.seasons.forEach { season ->
-                        SeasonCard(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 8.dp),
-                            seasonNo = season.season_number,
-                            episodes = season.episode_count
-                        )
-                        Spacer(modifier = Modifier.height(12.dp))
-                    }
-
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(

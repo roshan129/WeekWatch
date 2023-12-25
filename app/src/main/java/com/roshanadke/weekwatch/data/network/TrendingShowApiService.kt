@@ -10,10 +10,11 @@ interface TrendingShowApiService {
 
     companion object {
         const val BASE_URL = "https://api.themoviedb.org/"
-        const val IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original"
+        const val BACKDROP_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original"
+        const val POSTER_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
     }
 
-    @GET("3/trending/all/day")
+    @GET("3/trending/tv/day")
     suspend fun getAllTrending(): TrendingResponseDto
 
     @GET("3/tv/{series_id}")
@@ -25,4 +26,10 @@ interface TrendingShowApiService {
     suspend fun getSimilarShows(
         @Path("series_id") id: String
     ): TrendingResponseDto
+
+    @GET("3/search/tv")
+    suspend fun fetchSearchedShows(
+        @Query("query") query: String
+    ): TrendingResponseDto
+
 }

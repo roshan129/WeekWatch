@@ -8,4 +8,7 @@ interface TrendingShowRepository {
 
     fun getAllTrendingShows(): Flow<UiState<TrendingResponseDto>>
 
+    fun fetchSearchedShows(query: String): Flow<UiState<TrendingResponseDto>>
+
+
 }

@@ -24,4 +24,15 @@ class TrendingShowRepositoryImpl(
         }
     }
 
+    override fun fetchSearchedShows(query: String): Flow<UiState<TrendingResponseDto>> = flow {
+        try {
+            emit(UiState.Loading())
+            val result = apiService.fetchSearchedShows(query)
+            emit(UiState.Success(result))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emit(UiState.Error(message = e.localizedMessage))
+        }
+    }
+
 }

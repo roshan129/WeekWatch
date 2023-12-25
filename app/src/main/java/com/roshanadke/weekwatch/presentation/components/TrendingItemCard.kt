@@ -28,7 +28,7 @@ fun TrendingItemCard(
     onCardClicked: () -> Unit
 ) {
 
-    val imageUrl = TrendingShowApiService.IMAGE_BASE_URL + imageEndpoint
+    val imageUrl = TrendingShowApiService.POSTER_IMAGE_BASE_URL + imageEndpoint
 
     Card(
         modifier = modifier,
