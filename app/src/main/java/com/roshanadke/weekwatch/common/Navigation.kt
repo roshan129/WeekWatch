@@ -1,5 +1,6 @@
 package com.roshanadke.weekwatch.common
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -17,7 +18,14 @@ fun Navigation(
         composable(Screen.TrendingShowsScreen.route) {
             TrendingShowScreen(navController = navController)
         }
-        composable(Screen.DetailsScreen.route) { navBackStackEntry ->
+        composable(
+            Screen.DetailsScreen.route,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left)
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+            }) { navBackStackEntry ->
             val resultItem =
                 navController.previousBackStackEntry?.savedStateHandle?.get<TrendingItem>(Constants.TRENDING_ITEM)
             DetailsScreen(navController = navController, trendingItem = resultItem)

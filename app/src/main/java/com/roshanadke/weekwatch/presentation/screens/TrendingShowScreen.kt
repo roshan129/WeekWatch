@@ -34,6 +34,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -48,7 +50,9 @@ import com.roshanadke.weekwatch.common.Screen
 import com.roshanadke.weekwatch.common.UiEvent
 import com.roshanadke.weekwatch.presentation.components.TrendingItemCard
 import com.roshanadke.weekwatch.presentation.viewmodels.TrendingShowViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -59,12 +63,14 @@ fun TrendingShowScreen(
 
     val context = LocalContext.current
     val controller = LocalSoftwareKeyboardController.current
+    val focusRequester = remember { FocusRequester() }
     val trendingListState = viewModel.trendingItemListState.value
     val searchListState = viewModel.searchListState.value
     val searchQuery = viewModel.searchQuery.collectAsState()
     var inSearchMode by remember {
         mutableStateOf(false)
     }
+
 
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -77,6 +83,7 @@ fun TrendingShowScreen(
                 }
             }
         }
+
     }
 
     Scaffold(
@@ -87,11 +94,12 @@ fun TrendingShowScreen(
             TopAppBar(
                 title = {
                     if (inSearchMode) {
-                        BasicTextField(
+                            BasicTextField(
                             value = searchQuery.value, onValueChange = {
                                 viewModel.setSearchQuery(it)
                             },
                             modifier = Modifier
+                                .focusRequester(focusRequester)
                                 .padding(start = 12.dp)
                                 .fillMaxWidth()
                                 .drawBehind {
@@ -113,6 +121,11 @@ fun TrendingShowScreen(
                         if(!inSearchMode) {
                             controller?.hide()
                             viewModel.setSearchQuery("")
+                        } else {
+                            scope.launch {
+                                delay(500)
+                                focusRequester.requestFocus()
+                            }
                         }
 
                     }) {

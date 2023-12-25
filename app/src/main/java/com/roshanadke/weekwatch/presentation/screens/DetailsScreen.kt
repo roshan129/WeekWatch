@@ -173,12 +173,12 @@ fun DetailsScreen(
                 )
                 Spacer(modifier = Modifier.height(12.dp))
 
-                tvShowDetailsState.showDetails.seasons.forEach { season ->
+                tvShowDetailsState.showDetails.seasons.forEachIndexed { index, season,  ->
                     SeasonCard(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 8.dp),
-                        seasonNo = season.season_number,
+                        seasonNo = index + 1,
                         episodes = season.episode_count
                     )
                     Spacer(modifier = Modifier.height(12.dp))
