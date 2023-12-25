@@ -6,6 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.roshanadke.weekwatch.common.UiState
+import com.roshanadke.weekwatch.data.local.TrendingDataEntity
+import com.roshanadke.weekwatch.data.local.TvShowDao
+import com.roshanadke.weekwatch.domain.models.TrendingItem
 import com.roshanadke.weekwatch.domain.models.TvShowDetails
 import com.roshanadke.weekwatch.domain.repository.DetailsRepository
 import com.roshanadke.weekwatch.presentation.screens.TrendingItemListState
@@ -13,12 +16,14 @@ import com.roshanadke.weekwatch.presentation.screens.TvShowDetailsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
-    private val repository: DetailsRepository
+    private val repository: DetailsRepository,
+    private val dao: TvShowDao
 ) : ViewModel() {
 
     private var _tvShowDetailsState: MutableState<TvShowDetailsState> = mutableStateOf(TvShowDetailsState())
@@ -81,6 +86,23 @@ class DetailsViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun addToFavourites(item: TrendingItem?) {
+        item?.let {
+            val entity = item.toTrendingDataEntity()
+            viewModelScope.launch {
+                dao.insert(entity)
+            }
+        }
+    }
+
+    fun removeFromFavourites(id: Int?) {
+        id?.let {
+            viewModelScope.launch {
+                dao.delete(id)
+            }
+        }
     }
 
 }

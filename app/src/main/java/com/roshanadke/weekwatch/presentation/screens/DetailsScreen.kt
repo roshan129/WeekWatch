@@ -1,10 +1,7 @@
 package com.roshanadke.weekwatch.presentation.screens
 
-import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,33 +13,36 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.outlined.BookmarkAdd
-import androidx.compose.material3.Card
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.roshanadke.weekwatch.R
 import com.roshanadke.weekwatch.common.Constants
 import com.roshanadke.weekwatch.common.Screen
 import com.roshanadke.weekwatch.data.network.TrendingShowApiService
@@ -50,7 +50,7 @@ import com.roshanadke.weekwatch.domain.models.TrendingItem
 import com.roshanadke.weekwatch.presentation.components.SeasonCard
 import com.roshanadke.weekwatch.presentation.components.TrendingItemCard
 import com.roshanadke.weekwatch.presentation.viewmodels.DetailsViewModel
-import timber.log.Timber
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,11 +63,15 @@ fun DetailsScreen(
     val backdropImage = TrendingShowApiService.BACKDROP_IMAGE_BASE_URL + trendingItem?.backdrop_path
     val halfScreenWidth = LocalConfiguration.current.screenWidthDp / 2
     var isBookmarked by rememberSaveable {
-        mutableStateOf(false)
+        mutableStateOf(trendingItem?.isFavourite ?: false)
     }
 
     val tvShowDetailsState = viewModel.tvShowDetailsState.value
     val similarShowListState = viewModel.similarItemListState.value
+    val snackBarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val addedToFavourite = stringResource(id = R.string.added_favourite)
+
 
     LaunchedEffect(Unit) {
         trendingItem?.id?.let {
@@ -77,6 +81,9 @@ fun DetailsScreen(
     }
 
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(snackBarHostState)
+        },
         topBar = {
             TopAppBar(
                 title = { },
@@ -93,10 +100,18 @@ fun DetailsScreen(
                 actions = {
                     IconButton(onClick = {
                         isBookmarked = !isBookmarked
-                        //save post
+                        if (isBookmarked) {
+                            viewModel.addToFavourites(trendingItem)
+                            scope.launch {
+                                snackBarHostState.showSnackbar(addedToFavourite, duration = SnackbarDuration.Short)
+                            }
+                        } else {
+                            viewModel.removeFromFavourites(trendingItem?.id)
+                            snackBarHostState.currentSnackbarData?.dismiss()
+                        }
                     }) {
                         Icon(
-                            imageVector = if (isBookmarked) Icons.Filled.Bookmark else Icons.Outlined.BookmarkAdd,
+                            imageVector = if (isBookmarked) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                             contentDescription = "Bookmark"
                         )
                     }

@@ -128,13 +128,14 @@ fun TrendingShowScreen(
                                 value = item
                             )
                             navController.navigate(Screen.DetailsScreen.route)
-                        }
+                        },
+                        isFavourite = item.isFavourite
                     )
                 }
             }
         }
 
-        if (trendingListState.isLoading) {
+        if (trendingListState.isLoading || searchListState.isLoading) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,

@@ -6,9 +6,9 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.roshanadke.weekwatch.BuildConfig
 import com.roshanadke.weekwatch.common.UiState
-import com.roshanadke.weekwatch.data.network.dto.TrendingItemDto
+import com.roshanadke.weekwatch.data.local.TrendingDataEntity
+import com.roshanadke.weekwatch.data.local.TvShowDao
 import com.roshanadke.weekwatch.domain.models.TrendingItem
 import com.roshanadke.weekwatch.domain.repository.TrendingShowRepository
 import com.roshanadke.weekwatch.presentation.screens.TrendingItemListState
@@ -27,7 +27,8 @@ import javax.inject.Inject
 @OptIn(FlowPreview::class)
 @HiltViewModel
 class TrendingShowViewModel @Inject constructor(
-    private val repository: TrendingShowRepository
+    private val repository: TrendingShowRepository,
+    private val dao: TvShowDao
 ) : ViewModel() {
 
     private var _trendingList: MutableState<List<TrendingItem>> = mutableStateOf(emptyList())
@@ -44,15 +45,38 @@ class TrendingShowViewModel @Inject constructor(
     private var _searchQuery: MutableStateFlow<String> = MutableStateFlow("")
     val searchQuery: StateFlow<String>  = _searchQuery
 
+    private var _favouritesList: MutableState<List<TrendingDataEntity>> = mutableStateOf(emptyList())
+    val favouritesList: State<List<TrendingDataEntity>> = _favouritesList
+
     init {
         getAllTrendingShows()
-
         viewModelScope.launch {
             _searchQuery.debounce(500).collectLatest {
                 if(!it.isEmpty()) {
                     fetchSearchedShows(it)
                 }
             }
+        }
+        viewModelScope.launch {
+            dao.getAllRecords().collectLatest {
+                _favouritesList.value = it
+                refreshTrendingList()
+            }
+        }
+    }
+
+    private fun refreshTrendingList() {
+        if(trendingItemListState.value.list.isNotEmpty()) {
+            val favouriteIdList = favouritesList.value.map { it.id }
+
+            val trendingList = trendingItemListState.value.list.map { item ->
+                item.apply {
+                    isFavourite = favouriteIdList.contains(id)
+                }
+            }
+            _trendingItemListState.value = _trendingItemListState.value.copy(
+                list = trendingList
+            )
         }
     }
 
@@ -76,7 +100,14 @@ class TrendingShowViewModel @Inject constructor(
                 }
 
                 is UiState.Success -> {
-                    val trendingList = it.data?.trendingItemDtoList?.map { it.toTrendingItem() }
+                    val favouriteIdList = favouritesList.value.map { it.id }
+
+                    val trendingList = it.data?.trendingItemDtoList?.map { item ->
+                        item.toTrendingItem().apply {
+                            isFavourite = favouriteIdList.contains(id)
+                        }
+                    }
+
                     _trendingItemListState.value = _trendingItemListState.value.copy(
                         list = trendingList ?: emptyList(),
                         isLoading = false

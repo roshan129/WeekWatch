@@ -1,6 +1,10 @@
 package com.roshanadke.weekwatch.di
 
+import android.content.Context
+import androidx.room.Room
 import com.roshanadke.weekwatch.BuildConfig
+import com.roshanadke.weekwatch.data.local.TvShowDao
+import com.roshanadke.weekwatch.data.local.TvShowDatabase
 import com.roshanadke.weekwatch.data.network.TrendingShowApiService
 import com.roshanadke.weekwatch.data.repository.DetailsRepositoryImpl
 import com.roshanadke.weekwatch.data.repository.TrendingShowRepositoryImpl
@@ -9,6 +13,7 @@ import com.roshanadke.weekwatch.domain.repository.TrendingShowRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -79,6 +84,26 @@ object AppModule {
         apiService: TrendingShowApiService
     ): DetailsRepository {
         return DetailsRepositoryImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDatabase(
+        @ApplicationContext context: Context
+    ): TvShowDatabase {
+        return Room.databaseBuilder(
+            context,
+            TvShowDatabase::class.java,
+            "TvShowDatabase"
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideDao(
+        db: TvShowDatabase
+    ): TvShowDao {
+        return db.getTvShowDao()
     }
 
 }
