@@ -73,17 +73,19 @@ object AppModule {
     @Provides
     @Singleton
     fun provideTrendingRepository(
-        apiService: TrendingShowApiService
+        apiService: TrendingShowApiService,
+        dao: TvShowDao
     ): TrendingShowRepository {
-        return TrendingShowRepositoryImpl(apiService)
+        return TrendingShowRepositoryImpl(apiService, dao)
     }
 
     @Provides
     @Singleton
     fun provideDetailsRepository(
-        apiService: TrendingShowApiService
+        apiService: TrendingShowApiService,
+        dao: TvShowDao
     ): DetailsRepository {
-        return DetailsRepositoryImpl(apiService)
+        return DetailsRepositoryImpl(apiService, dao)
     }
 
     @Provides

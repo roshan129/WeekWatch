@@ -32,8 +32,7 @@ import javax.inject.Inject
 @OptIn(FlowPreview::class)
 @HiltViewModel
 class TrendingShowViewModel @Inject constructor(
-    private val repository: TrendingShowRepository,
-    private val dao: TvShowDao
+    private val repository: TrendingShowRepository
 ) : ViewModel() {
 
     private var _trendingList: MutableState<List<TrendingItem>> = mutableStateOf(emptyList())
@@ -67,7 +66,7 @@ class TrendingShowViewModel @Inject constructor(
             }
         }
         viewModelScope.launch {
-            dao.getAllRecords().collectLatest {
+            repository.getAllLocalRecords().collectLatest {
                 _favouritesList.value = it
                 refreshTrendingList()
             }

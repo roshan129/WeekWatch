@@ -27,8 +27,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
-    private val repository: DetailsRepository,
-    private val dao: TvShowDao
+    private val repository: DetailsRepository
 ) : ViewModel() {
 
     private var _tvShowDetailsState: MutableState<TvShowDetailsState> = mutableStateOf(TvShowDetailsState())
@@ -76,8 +75,6 @@ class DetailsViewModel @Inject constructor(
 
     fun getSimilarShows(id: String) {
         repository.getSimilarShows(id).onEach {
-            Timber.d("getSimilarShows: list size: ${it.data?.trendingItemDtoList?.size}")
-
             when (it) {
                 is UiState.Error -> {
                     _similarItemListState.value = _similarItemListState.value.copy(
@@ -111,19 +108,14 @@ class DetailsViewModel @Inject constructor(
     }
 
     fun addToFavourites(item: TrendingItem?) {
-        item?.let {
-            val entity = item.toTrendingDataEntity()
-            viewModelScope.launch {
-                dao.insert(entity)
-            }
+        viewModelScope.launch {
+            repository.addToFavourites(item)
         }
     }
 
     fun removeFromFavourites(id: Int?) {
-        id?.let {
-            viewModelScope.launch {
-                dao.delete(id)
-            }
+        viewModelScope.launch {
+            repository.removeFromFavourites(id)
         }
     }
 
