@@ -7,6 +7,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
+    id("de.mannodermaus.android-junit5") version "1.9.3.0"
 }
 
 android {
@@ -111,5 +112,18 @@ dependencies {
 
     //logging
     implementation("com.jakewharton.timber:timber:5.0.1")
+
+    //testing
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.3")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.3")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+
+    //turbine- flow testing
+    testImplementation("app.cash.turbine:turbine:0.7.0")
+
+    //assertion
+    testImplementation("com.willowtreeapps.assertk:assertk:0.26.1")
 
 }
