@@ -4,4 +4,6 @@
     <string name="added_favourite">Added to Favourites</string>
     <string name="favourite">Favourite</string>
     <string name="something_went_wrong">Oops! Something went wrong.</string>
+    <string name="seasons">Seasons</string>
+    <string name="no_data_found">No Data Found</string>
 </resources>

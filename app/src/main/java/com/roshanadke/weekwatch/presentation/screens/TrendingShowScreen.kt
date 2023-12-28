@@ -29,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -67,16 +68,19 @@ fun TrendingShowScreen(
     val trendingListState = viewModel.trendingItemListState.value
     val searchListState = viewModel.searchListState.value
     val searchQuery = viewModel.searchQuery.collectAsState()
-    var inSearchMode by remember {
+    var inSearchMode by rememberSaveable {
         mutableStateOf(false)
     }
-
+    var shouldShowErrorText by rememberSaveable {
+        mutableStateOf(false)
+    }
 
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        viewModel.eventFlow.collectLatest {event ->
+        viewModel.eventFlow.collectLatest { event ->
+            shouldShowErrorText = true
             when (event) {
                 is UiEvent.ShowSnackBar -> {
                     snackBarHostState.showSnackbar(event.message.asString(context))
@@ -94,7 +98,7 @@ fun TrendingShowScreen(
             TopAppBar(
                 title = {
                     if (inSearchMode) {
-                            BasicTextField(
+                        BasicTextField(
                             value = searchQuery.value, onValueChange = {
                                 viewModel.setSearchQuery(it)
                             },
@@ -118,7 +122,7 @@ fun TrendingShowScreen(
                 actions = {
                     IconButton(onClick = {
                         inSearchMode = !inSearchMode
-                        if(!inSearchMode) {
+                        if (!inSearchMode) {
                             controller?.hide()
                             viewModel.setSearchQuery("")
                         } else {
@@ -141,13 +145,15 @@ fun TrendingShowScreen(
         modifier = Modifier.fillMaxSize(),
     ) { paddingValues ->
 
+        val mainList =
+            if (searchQuery.value.isNotEmpty()) searchListState.list else trendingListState.list
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
 
-            val mainList = if(searchQuery.value.isNotEmpty()) searchListState.list else trendingListState.list
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
@@ -182,6 +188,15 @@ fun TrendingShowScreen(
             }
         }
 
+        if (shouldShowErrorText && mainList.isEmpty()) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = stringResource(id = R.string.no_data_found), color = Color.Gray)
+            }
+        }
 
     }
 

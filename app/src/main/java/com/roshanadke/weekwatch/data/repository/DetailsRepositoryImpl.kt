@@ -21,10 +21,10 @@ class DetailsRepositoryImpl(
             val result = apiService.getTvShowDetails(id).toTvShowDetails()
             emit(UiState.Success(result))
         } catch (e: IOException) {
-            emit(UiState.Error(message = "Please check your internet connection"))
+            emit(UiState.Error(data = null, message = "Please check your internet connection"))
         } catch (e: Exception) {
             e.printStackTrace()
-            emit(UiState.Error(message = e.localizedMessage))
+            emit(UiState.Error(data = null, message = e.localizedMessage))
         }
     }
 
@@ -34,10 +34,10 @@ class DetailsRepositoryImpl(
             val result = apiService.getSimilarShows(id)
             emit(UiState.Success(result))
         } catch (e: IOException) {
-            emit(UiState.Error(message = "Please check your internet connection"))
+            emit(UiState.Error(data = null, message = "Please check your internet connection"))
         } catch (e: Exception) {
             e.printStackTrace()
-            emit(UiState.Error(message = e.localizedMessage))
+            emit(UiState.Error(data = null, message = e.localizedMessage))
         }
     }
 

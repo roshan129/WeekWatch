@@ -21,9 +21,9 @@ class TrendingShowRepositoryImpl(
             val result = apiService.getAllTrending()
             emit(UiState.Success(data = result))
         } catch (e: IOException) {
-            emit(UiState.Error(message = "Please check your internet connection"))
+            emit(UiState.Error(data = null, message = "Please check your internet connection"))
         } catch (e: Exception) {
-            emit(UiState.Error(message = e.localizedMessage))
+            emit(UiState.Error(data = null, message = e.localizedMessage))
         }
     }
 
@@ -33,9 +33,9 @@ class TrendingShowRepositoryImpl(
             val result = apiService.fetchSearchedShows(query)
             emit(UiState.Success(result))
         } catch (e: IOException) {
-            emit(UiState.Error(message = "Please check your internet connection"))
+            emit(UiState.Error(data = null, message = "Please check your internet connection"))
         } catch (e: Exception) {
-            emit(UiState.Error(message = e.localizedMessage))
+            emit(UiState.Error(data = null, message = e.localizedMessage))
         }
     }
 

@@ -33,11 +33,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -83,7 +85,7 @@ fun DetailsScreen(
             viewModel.getTvShowDetails(it.toString())
         }
 
-        viewModel.eventFlow.collectLatest {event ->
+        viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is UiEvent.ShowSnackBar -> {
                     snackBarHostState.showSnackbar(event.message.asString(context))
@@ -115,7 +117,10 @@ fun DetailsScreen(
                         if (isBookmarked) {
                             viewModel.addToFavourites(trendingItem)
                             scope.launch {
-                                snackBarHostState.showSnackbar(addedToFavourite, duration = SnackbarDuration.Short)
+                                snackBarHostState.showSnackbar(
+                                    addedToFavourite,
+                                    duration = SnackbarDuration.Short
+                                )
                             }
                         } else {
                             viewModel.removeFromFavourites(trendingItem?.id)
@@ -167,13 +172,25 @@ fun DetailsScreen(
                 Spacer(modifier = Modifier.height(18.dp))
 
                 Text(
-                    text = "Seasons",
+                    text = stringResource(id = R.string.seasons),
                     fontSize = 18.sp,
+                    fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.padding(horizontal = 12.dp)
                 )
                 Spacer(modifier = Modifier.height(12.dp))
 
-                tvShowDetailsState.showDetails.seasons.forEachIndexed { index, season,  ->
+                if (tvShowDetailsState.showDetails.seasons.isEmpty() && !tvShowDetailsState.isLoading) {
+                    Text(
+                        text = stringResource(id = R.string.no_data_found),
+                        color = Color.Gray,
+                        fontSize = 14.sp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 12.dp),
+                        textAlign = TextAlign.Center
+                    )
+                }
+                tvShowDetailsState.showDetails.seasons.forEachIndexed { index, season ->
                     SeasonCard(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -191,6 +208,18 @@ fun DetailsScreen(
                     modifier = Modifier.padding(horizontal = 12.dp)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
+
+                if (similarShowListState.list.isEmpty() && !similarShowListState.isLoading) {
+                    Text(
+                        text = stringResource(id = R.string.no_data_found),
+                        color = Color.Gray,
+                        fontSize = 14.sp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 18.dp),
+                        textAlign = TextAlign.Center
+                    )
+                }
 
                 LazyRow {
                     items(similarShowListState.list) { item ->
