@@ -64,7 +64,7 @@ fun DetailsScreen(
 ) {
 
     val context = LocalContext.current
-    val backdropImage = TrendingShowApiService.BACKDROP_IMAGE_BASE_URL + trendingItem?.backdrop_path
+    val backdropImage = TrendingShowApiService.BACKDROP_IMAGE_BASE_URL + trendingItem?.backdropPath
     val halfScreenWidth = LocalConfiguration.current.screenWidthDp / 2
     var isBookmarked by rememberSaveable {
         mutableStateOf(trendingItem?.isFavourite ?: false)
@@ -85,7 +85,7 @@ fun DetailsScreen(
 
         viewModel.eventFlow.collectLatest {event ->
             when (event) {
-                is UiEvent.ShowSnackbar -> {
+                is UiEvent.ShowSnackBar -> {
                     snackBarHostState.showSnackbar(event.message.asString(context))
                 }
             }
@@ -179,7 +179,7 @@ fun DetailsScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 8.dp),
                         seasonNo = index + 1,
-                        episodes = season.episode_count
+                        episodes = season.episodeCount
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                 }
@@ -198,7 +198,7 @@ fun DetailsScreen(
                             modifier = Modifier
                                 .width(halfScreenWidth.dp)
                                 .padding(horizontal = 8.dp, vertical = 8.dp),
-                            imageEndpoint = item.poster_path,
+                            imageEndpoint = item.posterPath,
                             showName = item.title ?: item.name,
                             onCardClicked = {
                                 navController.currentBackStackEntry?.savedStateHandle?.set(

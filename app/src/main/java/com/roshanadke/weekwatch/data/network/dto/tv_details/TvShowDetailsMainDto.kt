@@ -1,38 +1,55 @@
 package com.roshanadke.weekwatch.data.network.dto.tv_details
 
 import com.roshanadke.weekwatch.domain.models.TvShowDetails
+import com.google.gson.annotations.SerializedName
 
 data class TvShowDetailsMainDto(
-    val adult: Boolean,
-    val backdrop_path: String,
-    val episode_run_time: List<Any>,
-    val first_air_date: String,
+    @SerializedName("adult")
+    val isAdult: Boolean,
+    @SerializedName("backdrop_path")
+    val backdropPath: String,
+    @SerializedName("episode_run_time")
+    val episodeRunTimeList: List<Any>,
+    @SerializedName("first_air_date")
+    val firstAirDate: String,
     val homepage: String,
     val id: Int,
-    val in_production: Boolean,
-    val languages: List<String>,
-    val last_air_date: String,
+    @SerializedName("in_production")
+    val inProduction: Boolean,
+    @SerializedName("languages")
+    val languageList: List<String>,
+    @SerializedName("last_air_date")
+    val lastAirDate: String,
     val name: String,
-    val number_of_episodes: Int,
-    val number_of_seasons: Int,
-    val origin_country: List<String>,
-    val original_language: String,
-    val original_name: String,
+    @SerializedName("number_of_episodes")
+    val numberOfEpisodes: Int,
+    @SerializedName("number_of_seasons")
+    val numberOfSeasons: Int,
+    @SerializedName("origin_country")
+    val originCountryList: List<String>,
+    @SerializedName("original_language")
+    val originalLanguage: String,
+    @SerializedName("original_name")
+    val originalName: String,
     val overview: String,
     val popularity: Double,
-    val poster_path: String,
-    val seasons: List<SeasonDto>,
+    @SerializedName("poster_path")
+    val posterPath: String,
+    @SerializedName("seasons")
+    val seasonList: List<SeasonDto>,
     val status: String,
     val tagline: String,
     val type: String,
-    val vote_average: Double,
-    val vote_count: Int
+    @SerializedName("vote_average")
+    val voteAverage: Double,
+    @SerializedName("vote_count")
+    val voteCount: Int
 ) {
     fun toTvShowDetails(): TvShowDetails {
         return TvShowDetails(
             id = id,
-            number_of_seasons = number_of_seasons,
-            seasons = seasons.map { it.toSeason() }
+            numberOfSeasons = numberOfSeasons,
+            seasons = seasonList.map { it.toSeason() }
         )
     }
 }

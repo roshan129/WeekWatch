@@ -6,7 +6,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [TrendingDataEntity::class],
-    version = 1
+    version = 2
 )
 abstract class TvShowDatabase : RoomDatabase() {
 

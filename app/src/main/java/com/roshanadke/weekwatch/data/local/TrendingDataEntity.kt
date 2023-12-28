@@ -2,27 +2,40 @@ package com.roshanadke.weekwatch.data.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 
 
 @Entity
 data class TrendingDataEntity(
-    val adult: Boolean? = null,
-    val backdrop_path: String? = null,
-    val first_air_date: String? = null,
+    @SerializedName("adult")
+    val isAdult: Boolean? = null,
+    @SerializedName("backdrop_path")
+    val backdropPath: String? = null,
+    @SerializedName("first_air_date")
+    val firstAirDate: String? = null,
     val id: Int? = null,
-    val media_type: String? = null,
+    @SerializedName("media_type")
+    val mediaType: String? = null,
     val name: String? = null,
-    val original_language: String? = null,
-    val original_name: String? = null,
-    val original_title: String? = null,
+    @SerializedName("original_language")
+    val originalLanguage: String? = null,
+    @SerializedName("original_name")
+    val originalName: String? = null,
+    @SerializedName("original_title")
+    val originalTitle: String? = null,
     val overview: String? = null,
     val popularity: Double? = null,
-    val poster_path: String? = null,
-    val release_date: String? = null,
+    @SerializedName("poster_path")
+    val posterPath: String? = null,
+    @SerializedName("release_date")
+    val releaseDate: String? = null,
     val title: String? = null,
-    val video: Boolean? = null,
-    val vote_average: Double? = null,
-    val vote_count: Int? = null
+    @SerializedName("video")
+    val isVideo: Boolean? = null,
+    @SerializedName("vote_average")
+    val voteAverage: Double? = null,
+    @SerializedName("vote_count")
+    val voteCount: Int? = null
 ) {
     @PrimaryKey(autoGenerate = true)
     var mainId: Int? = null

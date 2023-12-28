@@ -6,6 +6,8 @@ data class TrendingResponseDto(
     val page: Int?,
     @SerializedName("results")
     val trendingItemDtoList: List<TrendingItemDto>?,
-    val total_pages: Int?,
-    val total_results: Int?
+    @SerializedName("total_pages")
+    val totalPages: Int?,
+    @SerializedName("total_results")
+    val totalResults: Int?
 )

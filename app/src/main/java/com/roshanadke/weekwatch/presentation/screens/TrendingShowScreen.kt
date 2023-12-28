@@ -78,7 +78,7 @@ fun TrendingShowScreen(
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collectLatest {event ->
             when (event) {
-                is UiEvent.ShowSnackbar -> {
+                is UiEvent.ShowSnackBar -> {
                     snackBarHostState.showSnackbar(event.message.asString(context))
                 }
             }
@@ -157,7 +157,7 @@ fun TrendingShowScreen(
                 items(mainList) { item ->
                     TrendingItemCard(
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
-                        imageEndpoint = item.poster_path,
+                        imageEndpoint = item.posterPath,
                         showName = item.title ?: item.name,
                         onCardClicked = {
                             navController.currentBackStackEntry?.savedStateHandle?.set(

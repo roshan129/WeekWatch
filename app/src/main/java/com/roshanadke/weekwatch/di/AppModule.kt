@@ -3,6 +3,7 @@ package com.roshanadke.weekwatch.di
 import android.content.Context
 import androidx.room.Room
 import com.roshanadke.weekwatch.BuildConfig
+import com.roshanadke.weekwatch.common.Constants
 import com.roshanadke.weekwatch.data.local.TvShowDao
 import com.roshanadke.weekwatch.data.local.TvShowDatabase
 import com.roshanadke.weekwatch.data.network.TrendingShowApiService
@@ -96,8 +97,8 @@ object AppModule {
         return Room.databaseBuilder(
             context,
             TvShowDatabase::class.java,
-            "TvShowDatabase"
-        ).build()
+            Constants.DATABASE_NAME
+        ).fallbackToDestructiveMigration().build()
     }
 
     @Provides

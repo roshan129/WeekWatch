@@ -1,5 +1,5 @@
 package com.roshanadke.weekwatch.common
 
 sealed class UiEvent {
-    data class ShowSnackbar(val message: UiText): UiEvent()
+    data class ShowSnackBar(val message: UiText): UiEvent()
 }
