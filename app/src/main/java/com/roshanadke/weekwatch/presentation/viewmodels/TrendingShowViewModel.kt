@@ -10,10 +10,9 @@ import com.roshanadke.weekwatch.common.UiEvent
 import com.roshanadke.weekwatch.common.UiState
 import com.roshanadke.weekwatch.common.UiText
 import com.roshanadke.weekwatch.data.local.TrendingDataEntity
-import com.roshanadke.weekwatch.domain.repository.TrendingShowRepository
+import com.roshanadke.weekwatch.domain.use_case.TrendingShowUseCaseState
 import com.roshanadke.weekwatch.presentation.screens.TrendingItemListState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,7 +28,7 @@ import javax.inject.Inject
 @OptIn(FlowPreview::class)
 @HiltViewModel
 class TrendingShowViewModel @Inject constructor(
-    private val repository: TrendingShowRepository
+    private val useCaseState: TrendingShowUseCaseState
 ) : ViewModel() {
 
     private var _trendingItemListState: MutableState<TrendingItemListState> =
@@ -60,7 +59,7 @@ class TrendingShowViewModel @Inject constructor(
             }
         }
         viewModelScope.launch {
-            repository.getAllLocalRecords().collectLatest {
+            useCaseState.getFavouriteUseCase().collectLatest {
                 _favouritesList.value = it
                 refreshTrendingList()
             }
@@ -87,7 +86,7 @@ class TrendingShowViewModel @Inject constructor(
     }
 
     private fun getAllTrendingShows() {
-        repository.getAllTrendingShows().onEach { responseDtoUiState ->
+        useCaseState.trendingShowUseCase().onEach { responseDtoUiState ->
             when (responseDtoUiState) {
                 is UiState.Error -> {
                     _trendingItemListState.value = _trendingItemListState.value.copy(
@@ -130,7 +129,7 @@ class TrendingShowViewModel @Inject constructor(
     }
 
     private fun fetchSearchedShows(query: String) {
-        repository.fetchSearchedShows(query).onEach { responseDtoUiState ->
+        useCaseState.searchedShowUseCase(query).onEach { responseDtoUiState ->
             when (responseDtoUiState) {
                 is UiState.Error -> {
                     _searchListState.value = _searchListState.value.copy(

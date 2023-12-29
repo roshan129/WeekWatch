@@ -11,7 +11,7 @@ import com.roshanadke.weekwatch.common.UiState
 import com.roshanadke.weekwatch.common.UiText
 import com.roshanadke.weekwatch.domain.models.TrendingItem
 import com.roshanadke.weekwatch.domain.models.TvShowDetails
-import com.roshanadke.weekwatch.domain.repository.DetailsRepository
+import com.roshanadke.weekwatch.domain.use_case.DetailsUseCaseState
 import com.roshanadke.weekwatch.presentation.screens.TrendingItemListState
 import com.roshanadke.weekwatch.presentation.screens.TvShowDetailsState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
-    private val repository: DetailsRepository
+    private val useCaseState: DetailsUseCaseState
 ) : ViewModel() {
 
     private var _tvShowDetailsState: MutableState<TvShowDetailsState> =
@@ -39,7 +39,7 @@ class DetailsViewModel @Inject constructor(
     val eventFlow = _eventFlow.asSharedFlow()
 
     fun getTvShowDetails(id: String) {
-        repository.getTvShowDetails(id).onEach {
+        useCaseState.tvShowDetailsUseCase(id).onEach {
             when (it) {
                 is UiState.Error -> {
                     _tvShowDetailsState.value = _tvShowDetailsState.value.copy(
@@ -72,7 +72,7 @@ class DetailsViewModel @Inject constructor(
     }
 
     fun getSimilarShows(id: String) {
-        repository.getSimilarShows(id).onEach { responseDtoUiState ->
+        useCaseState.similarShowsUseCase(id).onEach { responseDtoUiState ->
             when (responseDtoUiState) {
                 is UiState.Error -> {
                     _similarItemListState.value = _similarItemListState.value.copy(
@@ -108,13 +108,13 @@ class DetailsViewModel @Inject constructor(
 
     fun addToFavourites(item: TrendingItem?) {
         viewModelScope.launch {
-            repository.addToFavourites(item)
+            useCaseState.addToFavouriteUseCase(item)
         }
     }
 
     fun removeFromFavourites(id: Int?) {
         viewModelScope.launch {
-            repository.removeFromFavourites(id)
+            useCaseState.removeFromFavouriteUseCase(id)
         }
     }
 

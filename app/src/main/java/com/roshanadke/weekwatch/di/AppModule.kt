@@ -11,6 +11,15 @@ import com.roshanadke.weekwatch.data.repository.DetailsRepositoryImpl
 import com.roshanadke.weekwatch.data.repository.TrendingShowRepositoryImpl
 import com.roshanadke.weekwatch.domain.repository.DetailsRepository
 import com.roshanadke.weekwatch.domain.repository.TrendingShowRepository
+import com.roshanadke.weekwatch.domain.use_case.AddToFavouriteUseCase
+import com.roshanadke.weekwatch.domain.use_case.DetailsUseCaseState
+import com.roshanadke.weekwatch.domain.use_case.GetFavouriteUseCase
+import com.roshanadke.weekwatch.domain.use_case.GetSearchedShowUseCase
+import com.roshanadke.weekwatch.domain.use_case.GetSimilarShowsUseCase
+import com.roshanadke.weekwatch.domain.use_case.GetTrendingShowUseCase
+import com.roshanadke.weekwatch.domain.use_case.GetTvShowDetailsUseCase
+import com.roshanadke.weekwatch.domain.use_case.RemoveFromFavouriteUseCase
+import com.roshanadke.weekwatch.domain.use_case.TrendingShowUseCaseState
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,7 +50,10 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor, headerInterceptor: Interceptor): OkHttpClient {
+    fun provideOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+        headerInterceptor: Interceptor
+    ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor(headerInterceptor)
@@ -107,6 +119,92 @@ object AppModule {
         db: TvShowDatabase
     ): TvShowDao {
         return db.getTvShowDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideTrendingShowUseCase(
+        repository: TrendingShowRepository
+    ): GetTrendingShowUseCase {
+        return GetTrendingShowUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTvShowDetailsUseCase(
+        repository: DetailsRepository
+    ): GetTvShowDetailsUseCase {
+        return GetTvShowDetailsUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFavouriteUseCase(
+        repository: TrendingShowRepository
+    ): GetFavouriteUseCase {
+        return GetFavouriteUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAddFavouriteUseCase(
+        repository: DetailsRepository
+    ): AddToFavouriteUseCase {
+        return AddToFavouriteUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRemoveFromFavouriteUseCase(
+        repository: DetailsRepository
+    ): RemoveFromFavouriteUseCase {
+        return RemoveFromFavouriteUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSimilarShowsUseCase(
+        repository: DetailsRepository
+    ): GetSimilarShowsUseCase {
+        return GetSimilarShowsUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetSearchedShowUseCase(
+        repository: TrendingShowRepository
+    ): GetSearchedShowUseCase {
+        return GetSearchedShowUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTvShowUseCaseState(
+        trendingShowUseCase: GetTrendingShowUseCase,
+        getFavouriteUseCase: GetFavouriteUseCase,
+        searchedShowUseCase: GetSearchedShowUseCase
+    ): TrendingShowUseCaseState {
+        return TrendingShowUseCaseState(
+            trendingShowUseCase,
+            getFavouriteUseCase,
+            searchedShowUseCase
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideDetailsUseCaseState(
+        tvShowDetailsUseCase: GetTvShowDetailsUseCase,
+        addToFavouriteUseCase: AddToFavouriteUseCase,
+        removeFromFavouriteUseCase: RemoveFromFavouriteUseCase,
+        similarShowsUseCase: GetSimilarShowsUseCase,
+    ): DetailsUseCaseState {
+        return DetailsUseCaseState(
+            tvShowDetailsUseCase,
+            addToFavouriteUseCase,
+            removeFromFavouriteUseCase,
+            similarShowsUseCase,
+        )
     }
 
 }

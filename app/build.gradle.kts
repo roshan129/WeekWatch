@@ -26,10 +26,13 @@ android {
             useSupportLibrary = true
         }
 
-        val key = gradleLocalProperties(rootDir).getProperty("TMDB_API_KEY")
+        /*val key = gradleLocalProperties(rootDir).getProperty("TMDB_API_KEY")
         val token = gradleLocalProperties(rootDir).getProperty("AUTH_TOKEN")
         buildConfigField("String", "API_KEY", key)
-        buildConfigField("String", "AUTH_TOKEN", token)
+        buildConfigField("String", "AUTH_TOKEN", token)*/
+
+        val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2NTM1YTE0MWRiNzhjYTAwYjc2NDcyMzQ4NTBhYTNhOCIsInN1YiI6IjY1ODZjYjVmMDcyMTY2Njg1YWE1M2MzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Klac7M6KH2XrBV4ntooL9sxgpQXSQkM95klwmrlFKQs"
+        buildConfigField("String", "AUTH_TOKEN", "\"$authToken\"")
     }
 
     buildTypes {
