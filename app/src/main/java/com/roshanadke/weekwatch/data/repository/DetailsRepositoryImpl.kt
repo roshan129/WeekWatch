@@ -36,7 +36,6 @@ class DetailsRepositoryImpl(
         } catch (e: IOException) {
             emit(UiState.Error(data = null, message = "Please check your internet connection"))
         } catch (e: Exception) {
-            e.printStackTrace()
             emit(UiState.Error(data = null, message = e.localizedMessage))
         }
     }

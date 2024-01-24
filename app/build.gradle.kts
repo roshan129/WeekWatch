@@ -129,4 +129,15 @@ dependencies {
     //assertion
     testImplementation("com.willowtreeapps.assertk:assertk:0.26.1")
 
+    androidTestImplementation("androidx.navigation:navigation-testing:2.7.6")
+
+    //mockito
+    testImplementation("org.mockito:mockito-core:5.9.0")
+    //testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.0")
+
+    //mockk
+    testImplementation("io.mockk:mockk:1.13.9")
+    androidTestImplementation("io.mockk:mockk-android:1.13.9")
+
+
 }

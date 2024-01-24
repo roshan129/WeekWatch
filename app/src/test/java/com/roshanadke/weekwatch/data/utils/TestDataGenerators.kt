@@ -89,3 +89,9 @@ fun getTrendingDataEntity(id: Int): TrendingDataEntity {
         voteCount = 100
     )
 }
+
+fun getTrendingItemDtoList() = listOf(
+        getTrendingItemDto(123, "Breaking Bad"),
+        getTrendingItemDto(124, "Breaking In"),
+        getTrendingItemDto(125, "Doctor Who")
+    )

@@ -6,6 +6,7 @@ import com.roshanadke.weekwatch.domain.repository.TrendingShowRepository
 import kotlinx.coroutines.flow.Flow
 
 class GetTrendingShowUseCase(
+
     private val repository: TrendingShowRepository
 ) {
 
