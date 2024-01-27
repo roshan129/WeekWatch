@@ -11,7 +11,7 @@ import com.roshanadke.weekwatch.common.UiState
 import com.roshanadke.weekwatch.common.UiText
 import com.roshanadke.weekwatch.data.local.TrendingDataEntity
 import com.roshanadke.weekwatch.domain.use_case.TrendingShowUseCaseState
-import com.roshanadke.weekwatch.presentation.screens.TrendingItemListState
+import com.roshanadke.weekwatch.presentation.screens.states.TrendingItemListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow

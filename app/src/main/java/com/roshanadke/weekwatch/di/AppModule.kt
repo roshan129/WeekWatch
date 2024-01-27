@@ -6,10 +6,13 @@ import com.roshanadke.weekwatch.BuildConfig
 import com.roshanadke.weekwatch.common.Constants
 import com.roshanadke.weekwatch.data.local.TvShowDao
 import com.roshanadke.weekwatch.data.local.TvShowDatabase
+import com.roshanadke.weekwatch.data.network.PeopleApiService
 import com.roshanadke.weekwatch.data.network.TrendingShowApiService
 import com.roshanadke.weekwatch.data.repository.DetailsRepositoryImpl
+import com.roshanadke.weekwatch.data.repository.PeopleRepositoryImpl
 import com.roshanadke.weekwatch.data.repository.TrendingShowRepositoryImpl
 import com.roshanadke.weekwatch.domain.repository.DetailsRepository
+import com.roshanadke.weekwatch.domain.repository.PeopleRepository
 import com.roshanadke.weekwatch.domain.repository.TrendingShowRepository
 import com.roshanadke.weekwatch.domain.use_case.AddToFavouriteUseCase
 import com.roshanadke.weekwatch.domain.use_case.DetailsUseCaseState
@@ -47,6 +50,20 @@ object AppModule {
             .build()
             .create(TrendingShowApiService::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun providePeopleApiService(
+        httpClient: OkHttpClient
+    ): PeopleApiService {
+        return Retrofit.Builder()
+            .baseUrl(PeopleApiService.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(httpClient)
+            .build()
+            .create(PeopleApiService::class.java)
+    }
+
 
     @Provides
     @Singleton
@@ -205,6 +222,12 @@ object AppModule {
             removeFromFavouriteUseCase,
             similarShowsUseCase,
         )
+    }
+
+    @Provides
+    @Singleton
+    fun providePeopleRepository(apiService: PeopleApiService): PeopleRepository {
+        return PeopleRepositoryImpl(apiService)
     }
 
 }

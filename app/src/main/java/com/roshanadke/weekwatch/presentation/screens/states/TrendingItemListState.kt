@@ -1,4 +1,4 @@
-package com.roshanadke.weekwatch.presentation.screens
+package com.roshanadke.weekwatch.presentation.screens.states
 
 import com.roshanadke.weekwatch.domain.models.TrendingItem
 

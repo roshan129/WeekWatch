@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.roshanadke.weekwatch.BuildConfig
 import com.roshanadke.weekwatch.common.Navigation
+import com.roshanadke.weekwatch.presentation.screens.MainScreen
 import com.roshanadke.weekwatch.presentation.screens.TrendingShowScreen
 import com.roshanadke.weekwatch.presentation.ui.theme.WeekWatchTheme
 import com.roshanadke.weekwatch.presentation.viewmodels.TrendingShowViewModel
@@ -30,9 +31,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-                    val navController = rememberNavController()
-                    Navigation(navController)
-
+                    MainScreen()
                 }
             }
         }

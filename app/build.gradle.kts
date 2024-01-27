@@ -113,6 +113,9 @@ dependencies {
     //icons
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
 
+    //material compose
+    implementation("androidx.compose.material:material:1.5.4")
+
     //logging
     implementation("com.jakewharton.timber:timber:5.0.1")
 
