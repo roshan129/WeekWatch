@@ -1,19 +1,20 @@
 package com.roshanadke.weekwatch.domain.models.people
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.roshanadke.weekwatch.data.network.dto.people.KnownForDto
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
-data class PersonModel(
+data class PersonDetailsModel(
     val adult: Boolean?,
+    val alsoKnownAs: List<String>?,
+    val biography: String?,
+    val birthday: String?,
+    val deathDay: String?,
     val gender: Int?,
+    val homepage: String?,
     val id: Int?,
-    val knownForDtoList: List<KnownForModel>?,
+    val imdbId: String?,
     val knownForDepartment: String?,
     val name: String?,
-    val originalName: String?,
+    val placeOfBirth: String?,
     val popularity: Double?,
     val profilePath: String?
-): Parcelable
+)

@@ -8,12 +8,6 @@ import retrofit2.http.Query
 
 interface TrendingShowApiService {
 
-    companion object {
-        const val BASE_URL = "https://api.themoviedb.org/"
-        const val BACKDROP_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original"
-        const val POSTER_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
-    }
-
     @GET("3/trending/tv/day")
     suspend fun getAllTrending(): TrendingResponseDto
 

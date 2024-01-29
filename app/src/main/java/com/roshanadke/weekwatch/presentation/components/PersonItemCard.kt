@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.roshanadke.weekwatch.R
+import com.roshanadke.weekwatch.common.Constants
+import com.roshanadke.weekwatch.common.getPosterImageUrl
 import com.roshanadke.weekwatch.data.network.TrendingShowApiService
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,7 +34,6 @@ fun PersonItemCard(
     onCardClicked: () -> Unit,
 ) {
 
-    val imageUrl = TrendingShowApiService.POSTER_IMAGE_BASE_URL + imageEndpoint
 
     Card(
         modifier = modifier,
@@ -49,7 +50,7 @@ fun PersonItemCard(
 
                 AsyncImage(
                     placeholder = painterResource(id = R.drawable.loading_placeholder),
-                    model = imageUrl,
+                    model = getPosterImageUrl(imageEndpoint),
                     contentScale = ContentScale.Crop,
                     contentDescription = null,
                     modifier = Modifier

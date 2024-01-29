@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.roshanadke.weekwatch.common.Constants
+import com.roshanadke.weekwatch.common.Screen
 import com.roshanadke.weekwatch.presentation.components.PersonItemCard
 import com.roshanadke.weekwatch.presentation.viewmodels.PeopleViewModel
 
@@ -50,7 +52,11 @@ fun PeopleListScreen(
                             imageEndpoint = it.profilePath,
                             personName = it.name,
                             onCardClicked = {
-
+                                navController.currentBackStackEntry?.savedStateHandle?.set(
+                                    key = Constants.PERSON_ITEM,
+                                    value = it
+                                )
+                                navController.navigate(Screen.PeopleDetailsScreen.route)
                             }
                         )
 

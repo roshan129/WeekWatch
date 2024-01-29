@@ -1,7 +1,10 @@
 package com.roshanadke.weekwatch.domain.models.people
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class KnownForModel(
     val adult: Boolean?,
     val backdropPath: String?,
@@ -22,4 +25,4 @@ data class KnownForModel(
     val video: Boolean?,
     val voteAverage: Double?,
     val voteCount: Int?
-)
+): Parcelable

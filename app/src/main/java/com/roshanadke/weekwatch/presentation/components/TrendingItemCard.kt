@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.roshanadke.weekwatch.R
+import com.roshanadke.weekwatch.common.Constants
 import com.roshanadke.weekwatch.data.network.TrendingShowApiService
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,7 +42,7 @@ fun TrendingItemCard(
     isFavourite: Boolean = false
 ) {
 
-    val imageUrl = TrendingShowApiService.POSTER_IMAGE_BASE_URL + imageEndpoint
+    val imageUrl = Constants.POSTER_IMAGE_BASE_URL + imageEndpoint
 
     Card(
         modifier = modifier,

@@ -1,5 +1,6 @@
 package com.roshanadke.weekwatch.presentation.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -8,37 +9,33 @@ import com.roshanadke.weekwatch.R
 import com.roshanadke.weekwatch.common.UiEvent
 import com.roshanadke.weekwatch.common.UiState
 import com.roshanadke.weekwatch.common.UiText
-import com.roshanadke.weekwatch.domain.repository.PeopleRepository
-import com.roshanadke.weekwatch.presentation.screens.states.PeopleListUiState
+import com.roshanadke.weekwatch.domain.models.people.PersonDetailsModel
+import com.roshanadke.weekwatch.domain.repository.PersonDetailsRepository
+import com.roshanadke.weekwatch.presentation.screens.states.PersonDetailsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
 
-
 @HiltViewModel
-class PeopleViewModel @Inject constructor(
-    private val repository: PeopleRepository
+class PersonDetailsViewModel @Inject constructor(
+    private val repository: PersonDetailsRepository
 ) : ViewModel() {
 
-    private var _peopleListUiState = mutableStateOf(PeopleListUiState())
-    val peopleListUiState: State<PeopleListUiState> = _peopleListUiState
+    private var _personDetailsState = mutableStateOf(PersonDetailsState())
+    val personDetailsState: State<PersonDetailsState?> = _personDetailsState
 
-    private val _eventFlow = MutableSharedFlow<UiEvent>()
-    val eventFlow = _eventFlow.asSharedFlow()
+    private var _eventFlow = MutableSharedFlow<UiEvent>()
+    val eventFlow = MutableSharedFlow<UiEvent>()
 
-    init {
-        getPopularPeopleList()
-    }
-
-    fun getPopularPeopleList() {
-        repository.getPopularPeopleList(1).onEach {
+    fun getPersonDetails(id: Int) {
+        repository.getPersonDetails(id).onEach {
             when (it) {
                 is UiState.Error -> {
-                    _peopleListUiState.value = _peopleListUiState.value.copy(
+                    _personDetailsState.value = _personDetailsState.value.copy(
                         isLoading = false
                     )
                     _eventFlow.emit(
@@ -52,18 +49,20 @@ class PeopleViewModel @Inject constructor(
                 }
 
                 is UiState.Loading -> {
-                    _peopleListUiState.value = _peopleListUiState.value.copy(isLoading = true)
+                    _personDetailsState.value = _personDetailsState.value.copy(
+                        isLoading = true
+                    )
                 }
 
                 is UiState.Success -> {
-                    _peopleListUiState.value = _peopleListUiState.value.copy(
+                    _personDetailsState.value = _personDetailsState.value.copy(
                         isLoading = false,
-                        peopleListMainDto = it.data
+                        personDetails = it.data
                     )
                 }
             }
-
         }.launchIn(viewModelScope)
     }
+
 
 }

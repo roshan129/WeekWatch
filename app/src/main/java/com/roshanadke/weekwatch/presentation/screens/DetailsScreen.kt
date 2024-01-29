@@ -49,6 +49,7 @@ import com.roshanadke.weekwatch.R
 import com.roshanadke.weekwatch.common.Constants
 import com.roshanadke.weekwatch.common.Screen
 import com.roshanadke.weekwatch.common.UiEvent
+import com.roshanadke.weekwatch.common.getBackDropImage
 import com.roshanadke.weekwatch.data.network.TrendingShowApiService
 import com.roshanadke.weekwatch.domain.models.TrendingItem
 import com.roshanadke.weekwatch.presentation.components.SeasonCard
@@ -66,7 +67,7 @@ fun DetailsScreen(
 ) {
 
     val context = LocalContext.current
-    val backdropImage = TrendingShowApiService.BACKDROP_IMAGE_BASE_URL + trendingItem?.backdropPath
+    val backdropImage = getBackDropImage(trendingItem?.backdropPath)
     val halfScreenWidth = LocalConfiguration.current.screenWidthDp / 2
     var isBookmarked by rememberSaveable {
         mutableStateOf(trendingItem?.isFavourite ?: false)

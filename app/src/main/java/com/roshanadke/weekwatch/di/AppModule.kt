@@ -10,9 +10,11 @@ import com.roshanadke.weekwatch.data.network.PeopleApiService
 import com.roshanadke.weekwatch.data.network.TrendingShowApiService
 import com.roshanadke.weekwatch.data.repository.DetailsRepositoryImpl
 import com.roshanadke.weekwatch.data.repository.PeopleRepositoryImpl
+import com.roshanadke.weekwatch.data.repository.PersonDetailsRepositoryImpl
 import com.roshanadke.weekwatch.data.repository.TrendingShowRepositoryImpl
 import com.roshanadke.weekwatch.domain.repository.DetailsRepository
 import com.roshanadke.weekwatch.domain.repository.PeopleRepository
+import com.roshanadke.weekwatch.domain.repository.PersonDetailsRepository
 import com.roshanadke.weekwatch.domain.repository.TrendingShowRepository
 import com.roshanadke.weekwatch.domain.use_case.AddToFavouriteUseCase
 import com.roshanadke.weekwatch.domain.use_case.DetailsUseCaseState
@@ -44,7 +46,7 @@ object AppModule {
     @Singleton
     fun provideTrendingApiService(httpClient: OkHttpClient): TrendingShowApiService {
         return Retrofit.Builder()
-            .baseUrl(TrendingShowApiService.BASE_URL)
+            .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(httpClient)
             .build()
@@ -57,7 +59,7 @@ object AppModule {
         httpClient: OkHttpClient
     ): PeopleApiService {
         return Retrofit.Builder()
-            .baseUrl(PeopleApiService.BASE_URL)
+            .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(httpClient)
             .build()
@@ -230,4 +232,9 @@ object AppModule {
         return PeopleRepositoryImpl(apiService)
     }
 
+    @Provides
+    @Singleton
+    fun providePersonDetailsRepository(apiService: PeopleApiService): PersonDetailsRepository {
+        return PersonDetailsRepositoryImpl(apiService)
+    }
 }

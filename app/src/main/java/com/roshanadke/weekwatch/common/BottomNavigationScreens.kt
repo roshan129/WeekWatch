@@ -10,6 +10,6 @@ import com.roshanadke.weekwatch.R
 sealed class BottomNavigationScreens(val route: String, @StringRes val resourceId: Int, val icon: ImageVector) {
 
     object HomeScreen: BottomNavigationScreens(Screen.TrendingShowsScreen.route, R.string.home, Icons.Default.Home)
-    object PeopleListScreen: BottomNavigationScreens("PeopleListScreen", R.string.people, Icons.Default.People)
+    object PeopleListScreen: BottomNavigationScreens(Screen.PeopleListScreen.route, R.string.people, Icons.Default.People)
 
 }
